@@ -9,6 +9,7 @@ Comprehensive OpenAPI specification for Proxmox Virtual Environment (VE) API. Bo
 ## 📋 Table of Contents
 
 - [The Star of the Show](#-the-star-of-the-show-openapijson-)
+- [What's in the Box?](#-whats-in-the-box)
 - [Features](#features)
 - [Quick Start (No PhD Required)](#-quick-start-no-phd-required)
 - [Installation](#-installation)
@@ -32,11 +33,32 @@ Comprehensive OpenAPI specification for Proxmox Virtual Environment (VE) API. Bo
 
 **Why this exists**: Because finding comprehensive Proxmox API docs feels like searching for Wi-Fi in the desert. This `openapi.json` file IS your oasis! 🏜️→🏝️
 
+## 📦 What's in the Box?
+
+This repository contains everything you need to work with the Proxmox VE API:
+
+### 📄 Core Files
+
+| File | Size | Purpose | Best For |
+|------|------|---------|----------|
+| **[`openapi.json`](openapi.json)** | 2.1MB | Complete API specification | API tools, code generation, comprehensive reference |
+| **[`PROXMOX_API_LLM_GUIDE.md`](PROXMOX_API_LLM_GUIDE.md)** | 7KB | Ultra-compact guide for AI/LLMs | AI-assisted development, quick reference |
+| **[`Proxmox VE API.postman_collection.json`](Proxmox%20VE%20API.postman_collection.json)** | 2.3MB | Ready-to-import Postman collection | API testing, interactive exploration |
+
+### 🎯 Usage Scenarios
+
+- **🤖 AI/LLM Development**: Use `PROXMOX_API_LLM_GUIDE.md` as context for ChatGPT, Claude, etc.
+- **🔧 API Testing**: Import the Postman collection for immediate testing
+- **📚 SDK Generation**: Feed `openapi.json` to OpenAPI Generator
+- **📖 Documentation**: Browse the complete API reference
+- **⚡ Quick Integration**: Copy-paste code patterns from the LLM guide
+
 ## ✨ Features
 
 - **Complete OpenAPI 3.0 Specification** - The mythical `openapi.json` with ALL endpoints
-- **2.1MB of Documentation** - Every parameter, response, and schema you could dream of
-- **Ready for Code Generation** - Compatible with OpenAPI Generator for instant SDKs
+- **AI/LLM Optimized Guide** - Ultra-compact reference designed for AI assistants
+- **Postman Collection** - Ready-to-import collection for immediate API testing
+- **Multiple Formats** - JSON specification + human-readable guide + interactive collection
 - **Authentication Examples** - Both token and ticket methods (because choices matter)
 
 ## 🚀 Quick Start (No PhD Required)
@@ -150,7 +172,17 @@ git clone https://github.com/ramphy/proxmox-api.git
 cd proxmox-api
 ```
 
-2. Import `openapi.json` into your favorite API tool:
+2. Choose your preferred method:
+
+#### 🚀 Option A: Ready-to-Use Postman Collection
+   - **Postman**: Import → Upload Files → Select `Proxmox VE API.postman_collection.json`
+   - **Instant access**: Pre-configured requests with examples and documentation
+
+#### 🤖 Option B: AI/LLM Development
+   - Use [`PROXMOX_API_LLM_GUIDE.md`](PROXMOX_API_LLM_GUIDE.md) as context for AI assistants
+   - Perfect for ChatGPT, Claude, or any LLM-powered development
+
+#### 🔧 Option C: OpenAPI Tools
    - **Postman**: Import → Upload Files → Select `openapi.json`
    - **Insomnia**: Import/Export → Import Data → From File → Select `openapi.json`
    - **Swagger UI**: Upload the `openapi.json` file directly
@@ -350,5 +382,7 @@ If you find this project useful, please consider giving it a star ⭐ to help ot
 
 **Repository Structure**:
 - 🌟 `openapi.json` - **THE MAIN ATTRACTION** - 2.1MB of pure Proxmox API specification
+- 🤖 `PROXMOX_API_LLM_GUIDE.md` - **AI DEVELOPER'S BEST FRIEND** - Ultra-compact guide for LLMs (7KB)
+- 🔧 `Proxmox VE API.postman_collection.json` - **INSTANT API TESTING** - Ready-to-import Postman collection (2.3MB)
 - 📜 `LICENSE` - Apache 2.0 license (boring but necessary)
 - 📖 `README.md` - This fabulous documentation you're reading right now
