@@ -1,0 +1,137 @@
+# Proxmox VE API: The Missing Manual for LLMs
+
+This repository contains comprehensive documentation and tools for working with the Proxmox Virtual Environment API. It includes a complete OpenAPI specification, ready-to-use code examples, and an LLM-optimized guide for AI-assisted development.
+
+<context>
+Repository Purpose: Comprehensive Proxmox VE API documentation with OpenAPI specification, code examples, and tools for automation and integration.
+
+Key Files:
+- openapi.json (2.1MB): Complete API specification with all endpoints, schemas, and examples
+- PROXMOX_API_LLM_GUIDE.md (7KB): Ultra-compact reference guide optimized for LLM consumption
+- Proxmox VE API.postman_collection.json (2.3MB): Ready-to-import Postman collection for testing
+
+API Base URL: https://{host}:8006/api2/json/
+Authentication: Supports both ticket-based (2h expiry) and API token (permanent) methods
+</context>
+
+## Core Resources
+
+### Primary Documentation
+> [openapi.json](openapi.json) - Complete OpenAPI 3.0 specification (2.1MB)
+> [PROXMOX_API_LLM_GUIDE.md](PROXMOX_API_LLM_GUIDE.md) - LLM-optimized quick reference
+> [README.md](README.md) - Comprehensive documentation and examples
+
+### Testing & Development
+> [Proxmox VE API.postman_collection.json](Proxmox%20VE%20API.postman_collection.json) - Postman collection for API testing
+
+### External Documentation
+> [Official Proxmox VE API Documentation](https://pve.proxmox.com/wiki/Proxmox_VE_API)
+> [Interactive API Viewer](https://pve.proxmox.com/pve-docs/api-viewer/)
+
+<authentication>
+Two authentication methods:
+
+1. Ticket Authentication (recommended for scripts):
+```python
+import requests
+auth_response = requests.post(
+    "https://host:8006/api2/json/access/ticket",
+    data={"username": "root@pam", "password": "password"},
+    verify=False
+).json()["data"]
+
+headers = {
+    "Cookie": f"PVEAuthCookie={auth_response['ticket']}",
+    "CSRFPreventionToken": auth_response["CSRFPreventionToken"]
+}
+```
+
+2. API Token Authentication (recommended for automation):
+```python
+headers = {"Authorization": "PVEAPIToken=root@pam!token-name=uuid-value"}
+```
+</authentication>
+
+<common_operations>
+Essential API patterns:
+
+Virtual Machines:
+- List VMs: GET /nodes/{node}/qemu
+- Create VM: POST /nodes/{node}/qemu
+- Start VM: POST /nodes/{node}/qemu/{vmid}/status/start
+- Stop VM: POST /nodes/{node}/qemu/{vmid}/status/stop
+- Clone VM: POST /nodes/{node}/qemu/{vmid}/clone
+
+Containers:
+- List containers: GET /nodes/{node}/lxc
+- Create container: POST /nodes/{node}/lxc
+- Start container: POST /nodes/{node}/lxc/{vmid}/status/start
+
+Storage & Monitoring:
+- List storage: GET /storage
+- Node status: GET /nodes/{node}/status
+- Cluster status: GET /cluster/status
+</common_operations>
+
+<code_examples>
+Minimal Python client:
+```python
+import requests
+from urllib3 import disable_warnings; disable_warnings()
+
+class ProxmoxAPI:
+    def __init__(self, host, user, password):
+        self.base = f"https://{host}:8006/api2/json"
+        auth = requests.post(f"{self.base}/access/ticket",
+            data={"username": user, "password": password}, verify=False).json()["data"]
+        self.headers = {"Cookie": f"PVEAuthCookie={auth['ticket']}",
+                       "CSRFPreventionToken": auth["CSRFPreventionToken"]}
+
+    def get(self, path): return requests.get(f"{self.base}{path}", headers=self.headers, verify=False).json()
+    def post(self, path, data={}): return requests.post(f"{self.base}{path}", headers=self.headers, data=data, verify=False).json()
+
+# Usage: api = ProxmoxAPI("192.168.1.100", "root@pam", "password")
+```
+
+VM creation pattern:
+```python
+vm_config = {
+    "vmid": 100,
+    "name": "test-vm",
+    "memory": 2048,
+    "cores": 2,
+    "net0": "virtio,bridge=vmbr0",
+    "scsi0": "local-lvm:32",
+    "ostype": "l26"
+}
+result = api.post(f"/nodes/{node}/qemu", vm_config)
+```
+</code_examples>
+
+<llm_instructions>
+When generating code for Proxmox API:
+
+1. Always use verify=False for SSL requests (self-signed certificates)
+2. Include CSRF token for POST/PUT/DELETE operations with ticket auth
+3. Handle task responses - many operations return task IDs for monitoring
+4. Use proper error handling with try/except blocks
+5. Storage format: "{storage-name}:{size}" (e.g., "local-lvm:32")
+6. Network format: "{type},bridge={bridge}[,additional-params]"
+7. Most destructive operations return task IDs for async execution monitoring
+
+Response patterns:
+- Success: {"data": {...}, "success": 1}
+- Task: {"data": "UPID:node:task_id:type:user:status", "success": 1}
+- Error: {"errors": {"param": "error message"}, "success": 0}
+
+Common VM parameters:
+- vmid: VM ID (required)
+- name: VM name
+- memory: RAM in MB
+- cores: CPU cores
+- net0: Network interface (virtio,bridge=vmbr0)
+- scsi0/ide0/sata0: Storage (storage:size)
+- ostype: OS type (l26 for Linux, win10 for Windows)
+
+Always refer to the PROXMOX_API_LLM_GUIDE.md for the most current API patterns and the openapi.json for complete endpoint specifications.
+</llm_instructions>
